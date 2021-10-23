@@ -15,8 +15,8 @@
 		#grid {
 			display: flex;
 			flex-direction: column;
-			width: 500px;
-			height: 500px;
+			width: 750px;
+			height: 750px;
 			border: 3px solid green;
 			flex-wrap: nowrap;
 			justify-content: center;
