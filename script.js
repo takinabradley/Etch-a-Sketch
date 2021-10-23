@@ -1,27 +1,50 @@
-function createGrid (size) {
-  grid = document.querySelector('#grid');
-  
-  clearGrid();
-  
-  for (i = 0; i < size; i++) {
-    row = document.createElement('div');
-    row.classList.add('row');
-    grid.appendChild(row);
-  }
-  //adds 'size' amount of rows to #grid container.
-  
-  for (i = 0; i < size; i++) {
-    rows = document.querySelectorAll('#grid > div');
-    
-    cell = document.createElement('div');
-    cell.classList.add('cell');
-    
-    rows.forEach ( row => row.appendChild(cell.cloneNode(true)) );
-    /*cell.cloneNod(true) allows the cells to be cloned to each row, instead
-      of assigned to a row, then reassigned to another row on each 'row.forEach'
-      loop*/
-  }
-  //adds 'size' amount of cells to each row.
+function newRow() {
+  row = document.createElement('div');
+  row.classList.add('row');
+  return row;
+}
+//creates a single row to be appended to #grid later.
+
+
+function newCell() {
+  cell = document.createElement('div');
+  cell.classList.add('cell');
+  return cell;
+}
+//creates a single cell to be appended to rows later.
+
+
+function createGrid (size) {                           
+  grid = document.querySelector('#grid');              
+                                                       
+  clearGrid();                                         
+                                                       
+  for (i = 0; i < size; i++) {                         
+    grid.appendChild(newRow());                        
+  }                                                    
+  //adds 'size' amount of rows to #grid container.     
+                                                       
+  for (i = 0; i < size; i++) {                         
+    rows = document.querySelectorAll('#grid > div');   
+    rows.forEach ( row => row.appendChild(newCell()) );
+    /*REMEMBER THIS:
+      Previous code that added cells. Doing it this way required you to use
+      .cloneNode(true). By creating elements via a function, a different cell 
+      is declared used each time negating the need for the method. 
+      
+      for (i = 0; i < size; i++) {
+        let rows = document.querySelectorAll('#grid > div');
+        
+        let cell = document.createElement('div');
+        cell.classList.add('cell');
+        
+        rows.forEach ( row => row.appendChild(cell.cloneNode(true)) );
+        //cell.cloneNod(true) allows the cells to be cloned to each row, instead
+        //of assigned to a row, then reassigned to another row on each 
+        //'row.forEach' loop.
+      }*/
+  }                                                    
+  //adds 'size' amount of cells to each row.           
 }
 //creates a 'size'x'size' grid.
 
@@ -46,7 +69,7 @@ function allowDraw () {
   }));
 }
 /*allowDraw applies event listeners to each cell of the grid.
-  Needs to be applied every time a new grid is created.*/
+  Needs to be applied to each grid that is created.*/
 
 
 function createSketchPad (size) {
@@ -58,11 +81,10 @@ function createSketchPad (size) {
 
 function wipeSketchPad() {
   size = findGridSize();
-  
+
   createSketchPad(size);
 }
-/*clears the current sketchpad, then replaces it with a sketchpad of the same 
-  size*/
+//replaces a current sketchpad with a new sketchpad of the same size
   
 
 createSketchPad(16);
