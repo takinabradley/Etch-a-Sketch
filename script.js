@@ -73,7 +73,21 @@ function wipeSketchPad() {
 //replaces a current sketchpad with a new sketchpad of the same size
 
 
+function allowButtonInput() {
+  wipeBtn = document.querySelector('.wipe');
+  wipeBtn.addEventListener('click', wipeSketchPad);
+  
+  newSketchPad = document.querySelector('.new-sketchpad');
+  newSketchPad.addEventListener('click', () => {
+    createSketchPad(prompt('Pick a size between 1 - 100'))
+  });
+}
+/*considering making buttons that add rows and columns to the sketchpad
+  without clearing it, but that might be a bit hard.*/
+
+
 createSketchPad(16);
+allowButtonInput();
 
 
 
