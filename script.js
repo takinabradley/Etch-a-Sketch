@@ -80,7 +80,7 @@ function createSketchPad (size) {
   allowDraw(applyColor());
 }
 /*creates a grid with with drawing allowed, aka a 'SketchPad'.
-  Uses allowColor(); to test */
+  Uses applyColor(); to apply the color that should be used.*/
 
 
 function wipeSketchPad() {
