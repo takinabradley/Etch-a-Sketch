@@ -53,11 +53,10 @@ function findGridSize () {
 
 function allowDraw (color) {
   cells = document.querySelectorAll('#grid > div > div');
-
   cells.forEach( cell => cell.addEventListener('mouseenter', (e) => {
     if (color === 'random') {
       e.target.style.backgroundColor = `rgb( ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, 0)`;
-    } else {
+    } else if ('black') {
       e.target.style.backgroundColor = 'black';
     }
   }));
@@ -71,7 +70,7 @@ function applyColor() {
     if (document.querySelector('.color').getAttribute('class') === 'color true') {
       return 'random';
     } else {
-      return;
+      return 'black';
     }
 }
 //applies random color if .color toggle is true
@@ -106,9 +105,7 @@ function allowButtonInput() {
     allowDraw(applyColor());
   });
 }
-/*considering making buttons that add rows and columns to the sketchpad
-  without clearing it, but that might be a bit hard.*/
-
+// applies functions to buttons via event listeners.
 
 createSketchPad(16);
 allowButtonInput();
