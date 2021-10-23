@@ -1,35 +1,29 @@
 function createGrid (size) {
-  let grid = document.querySelector('#grid');
+  grid = document.querySelector('#grid');
+  
+  grid.innerHTML = '';
+  //clears any previous grid contents every time the function is run.
   
   for (i = 0; i < size; i++) {
     row = document.createElement('div');
+    row.classList.add('row');
     grid.appendChild(row);
   }
+  //adds 'size' amount of rows to #grid container.
   
   for (i = 0; i < size; i++) {
-    row = document.querySelectorAll('#grid > div');
-    items = document.createElement('div');
-    row.forEach ( row => row.appendChild(items.cloneNode(true)) );
+    rows = document.querySelectorAll('#grid > div');
+    
+    cell = document.createElement('div');
+    cell.classList.add('cell');
+    
+    rows.forEach ( row => row.appendChild(cell.cloneNode(true)) );
+    /*cell.cloneNod(true) allows the cells to be cloned to each row, instead
+      of assigned to a row, then reassigned to another row on each row.forEach loop*/
   }
+  //adds 'size' amount of cells to each row.
   
-  // Below code doesn't work because 'items' isn't cloned to be used again.
-  // row[1] = document.createElement('div');
-  // row[1].classList.add('_1');
-  // 
-  // row[2] = document.createElement('div');
-  // row[2].classList.add('_2');
-  // 
-  // items[1] = document.createElement('div');
-  // items[2] = document.createElement('div');
-  // 
-  // row[1].appendChild(items[1]);
-  // row[1].appendChild(items[2]);
-  // 
-  // row[2].appendChild(items[1]);
-  // row[2].appendChild(items[2]);
-  // 
-  // grid.appendChild(row[1]);
-  // grid.appendChild(row[2]);
 }
-  
+//creates a 'size'x'size' grid.
+
 createGrid(16);
