@@ -26,4 +26,20 @@ function createGrid (size) {
 }
 //creates a 'size'x'size' grid.
 
-createGrid(16);
+function allowDraw () {
+  cells = document.querySelectorAll('#grid > div > div');
+  
+  cells.forEach( cell => cell.addEventListener('mouseenter', (e) => e.target.style.backgroundColor = "black"));
+}
+//draw needs to be applied every time a new grid is created.
+
+function createSketchPad (size) {
+  createGrid(size);
+  allowDraw();
+}
+//creates a grid with with drawing allowed
+
+createSketchPad(16);
+
+
+
