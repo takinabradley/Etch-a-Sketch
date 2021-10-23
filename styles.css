@@ -1,7 +1,7 @@
 		* {
 			box-sizing: border-box;
 		}
-		//fixes gaps between grid squares
+		/*fixes gaps between grid squares*/
 		
 		body {
 			display: flex;
