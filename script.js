@@ -27,6 +27,9 @@ function createCells(size) {
 
 
 function createGrid (size) {
+  
+  if (size < 1 || size > 100 || size === null) return;
+  
   grid = document.querySelector('#grid');
 
   clearGrid();
@@ -48,22 +51,37 @@ function findGridSize () {
 //counts the rows in the #grid container and returns the grid size.
 
 
-function allowDraw () {
+function allowDraw (color) {
   cells = document.querySelectorAll('#grid > div > div');
 
   cells.forEach( cell => cell.addEventListener('mouseenter', (e) => {
-    e.target.style.backgroundColor = "black";
+    if (color === 'random') {
+      e.target.style.backgroundColor = `rgb( ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, 0)`;
+    } else {
+      e.target.style.backgroundColor = 'black';
+    }
   }));
 }
-/*allowDraw applies event listeners to each cell of the grid.
+/*allowDraw applies event listeners to each cell of the grid that change the
+  background color on mouseenter.
   Needs to be applied to each grid that is created.*/
 
 
+function applyColor() {
+    if (document.querySelector('.color').getAttribute('class') === 'color true') {
+      return 'random';
+    } else {
+      return;
+    }
+}
+//applies random color if .color toggle is true
+
 function createSketchPad (size) {
   createGrid(size);
-  allowDraw();
+  allowDraw(applyColor());
 }
-//creates a grid with with drawing allowed, aka a 'SketchPad'.
+/*creates a grid with with drawing allowed, aka a 'SketchPad'.
+  Uses allowColor(); to test */
 
 
 function wipeSketchPad() {
@@ -79,7 +97,13 @@ function allowButtonInput() {
   
   newSketchPad = document.querySelector('.new-sketchpad');
   newSketchPad.addEventListener('click', () => {
-    createSketchPad(prompt('Pick a size between 1 - 100'))
+    createSketchPad(prompt('Pick a size', '1 - 100'));
+  });
+  
+  colorToggle = document.querySelector('.color');
+  colorToggle.addEventListener('click', (e) => {
+    colorToggle.classList.toggle('true');
+    allowDraw(applyColor());
   });
 }
 /*considering making buttons that add rows and columns to the sketchpad
