@@ -55,7 +55,9 @@ function allowDraw (color) {
   cells = document.querySelectorAll('#grid > div > div');
   cells.forEach( cell => cell.addEventListener('mouseenter', (e) => {
     if (color === 'random') {
-      e.target.style.backgroundColor = `rgb( ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, 0)`;
+      e.target.style.backgroundColor = `rgb(${Math.floor(Math.random() * 101)}%, 
+                                        ${Math.floor(Math.random() * 101)}%, 
+                                        ${Math.floor(Math.random() * 101)}%)`;
     } else if ('black') {
       e.target.style.backgroundColor = 'black';
     }
