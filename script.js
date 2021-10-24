@@ -26,6 +26,18 @@ function createCells(size) {
 //creates 'size' amount of cells and appends them to existing rows in #grid
 
 
+function clearGrid() {
+  document.querySelector('#grid').innerHTML = '';
+}
+//clears any previous grid contents.
+
+
+function findGridSize () {
+  return document.querySelectorAll('#grid > div').length;
+}
+//counts the rows in the #grid container and returns the grid size.
+
+
 function createGrid (size) {
   
   if (size < 1 || size > 100 || size === null) return;
@@ -39,36 +51,7 @@ function createGrid (size) {
 //creates a 'size'x'size' grid.
 
 
-function clearGrid() {
-  document.querySelector('#grid').innerHTML = '';
-}
-//clears any previous grid contents.
-
-
-function findGridSize () {
-  return document.querySelectorAll('#grid > div').length;
-}
-//counts the rows in the #grid container and returns the grid size.
-
-
-function allowDraw (color) {
-  cells = document.querySelectorAll('#grid > div > div');
-  cells.forEach( cell => cell.addEventListener('mouseenter', (e) => {
-    if (color === 'random') {
-      e.target.style.backgroundColor = `rgb(${Math.floor(Math.random() * 101)}%, 
-                                        ${Math.floor(Math.random() * 101)}%, 
-                                        ${Math.floor(Math.random() * 101)}%)`;
-    } else if ('black') {
-      e.target.style.backgroundColor = 'black';
-    }
-  }));
-}
-/*allowDraw applies event listeners to each cell of the grid that change the
-  background color on mouseenter.
-  Needs to be applied to each grid that is created.*/
-
-
-function applyColor() {
+function getColor() {
     if (document.querySelector('.color').getAttribute('class') === 'color true') {
       return 'random';
     } else {
@@ -77,12 +60,55 @@ function applyColor() {
 }
 //applies random color if .color toggle is true
 
-function createSketchPad (size) {
-  createGrid(size);
-  allowDraw(applyColor());
+
+function findCurrentLightness(cell) {
+  console.log(cell.style.backgroundColor);
+  return 10;
+  /*A mock value to keep the program running, you can visually see the cells get darker on a second pass*/
 }
-/*creates a grid with with drawing allowed, aka a 'SketchPad'.
-  Uses applyColor(); to apply the color that should be used.*/
+// finds the current lightness of a cell
+
+
+function lowerLightness (lightness) {
+  
+}
+//lowers a given lightness by 10%
+
+
+function allowDraw (color) {
+  cells = document.querySelectorAll('#grid > div > div');
+  cells.forEach( cell => cell.addEventListener('mouseenter', (e) => {
+    if (color === 'random') {
+      let hue = Math.floor(Math.random() * 361);
+      let saturation = Math.floor(Math.random() * 101);
+      let lightness = Math.floor(Math.random() * 101);
+      
+      if (cell.className === 'cell colored') {
+        lightness = findCurrentLightness(cell);
+        //lightness = lowerLightness(lightness);
+      }
+      
+      cell.style.backgroundColor = `hsl(${hue}, ${saturation}%, ${lightness}%)`;
+      cell.classList.add('colored');
+    } else if (color === 'black') {
+      cell.style.backgroundColor = 'black';
+      cell.classList.remove('colored');
+    }
+  }));
+}
+/*allowDraw applies event listeners to each cell of the grid that change the
+  background color on mouseenter.
+  Needs to be applied to each grid that is created.*/
+//Bug: when a sketchpad is created, and it's original color is black,
+//the color toggle works, but findCurrentColor is never called. This is fixed
+//by turning on colors by pressing the color button, clicking wipe (or creating 
+//a new sketchpad), which initializes the sketchpad with allowColor('random').
+//Breaks again when color is switched back to black.
+
+//should I move the 'if' statements outside of the event listener function,
+//then add two separate event listeners inside of them for allowDraw('black') and 
+//allowDraw('random')? I suppose doing it that way would allow me to easily 
+//remove one or the other.
 
 
 function wipeSketchPad() {
@@ -104,10 +130,19 @@ function allowButtonInput() {
   colorToggle = document.querySelector('.color');
   colorToggle.addEventListener('click', (e) => {
     colorToggle.classList.toggle('true');
-    allowDraw(applyColor());
+    allowDraw(getColor());
   });
 }
 // applies functions to buttons via event listeners.
+
+
+function createSketchPad (size) {
+  createGrid(size);
+  allowDraw(getColor());
+}
+/*creates a grid with with drawing allowed, aka a 'SketchPad'.
+  Uses getColor(); to get the color that should be used.*/
+
 
 createSketchPad(16);
 allowButtonInput();
