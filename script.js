@@ -61,8 +61,8 @@ function getColor() {
 //applies random color if .color toggle is true
 
 
-function findCurrentLightness(cell) {
-  console.log(cell.style.backgroundColor);
+function findCurrentLightness(e) {
+  console.log(e.target.style.backgroundColor);
   return 10;
   /*A mock value to keep the program running, you can visually see the cells get darker on a second pass*/
 }
@@ -75,45 +75,54 @@ function lowerLightness (lightness) {
 //lowers a given lightness by 10%
 
 
-// function drawRandom (e) {
-//   //e.target.removeEventListener('mouseenter', drawBlack);
-//   let hue = Math.floor(Math.random() * 361);
-//   let saturation = Math.floor(Math.random() * 101);
-//   let lightness = Math.floor(Math.random() * 101);
-//   
-//   e.target.style.backgroundColor = `hsl(${hue}, ${saturation}%, ${lightness}%)`;
-//   e.target.classList.add('colored');
-// }
-// 
-// function drawBlack (e) {
-//   //e.target.removeEventListener('mouseenter', drawRandom);
-//   e.target.style.backgroundColor = 'black';
-//   e.target.classList.remove('colored');
-// }
+function drawRandom (e) {
+  //e.target.removeEventListener('mouseenter', drawBlack);
+  let hue = Math.floor(Math.random() * 361);
+  let saturation = Math.floor(Math.random() * 101);
+  let lightness = Math.floor(Math.random() * 101);
+  
+  if (e.target.className === 'cell colored') {
+    lightness = findCurrentLightness(e);
+    //lightness = lowerLightness(lightness);
+  }
+  
+  e.target.style.backgroundColor = `hsl(${hue}, ${saturation}%, ${lightness}%)`;
+  e.target.classList.add('colored');
+}
+
+function drawBlack (e) {
+  //e.target.removeEventListener('mouseenter', drawRandom);
+  e.target.style.backgroundColor = 'black';
+  e.target.classList.remove('colored');
+}
 
 
 function allowDraw (color) {
-  cells = document.querySelectorAll('#grid > div > div');
+  cells = document.querySelectorAll('.cell');
+  cells.forEach( cell => {
+    cell.removeEventListener('mouseenter', drawRandom);
+    cell.removeEventListener('mouseenter', drawBlack);
+  });
   
   if (color === 'random') {
-    cells.forEach( cell => cell.addEventListener('mouseenter', (e) => {
-      let hue = Math.floor(Math.random() * 361);
-      let saturation = Math.floor(Math.random() * 101);
-      let lightness = Math.floor(Math.random() * 101);
-      
-      if (cell.className === 'cell colored') {
-        lightness = findCurrentLightness(cell);
-        //lightness = lowerLightness(lightness);
-      }
-      
-      cell.style.backgroundColor = `hsl(${hue}, ${saturation}%, ${lightness}%)`;
-      cell.classList.add('colored');
-    }));
+    cells.forEach( cell => cell.addEventListener('mouseenter', drawRandom));//(e) => {
+    //   let hue = Math.floor(Math.random() * 361);
+    //   let saturation = Math.floor(Math.random() * 101);
+    //   let lightness = Math.floor(Math.random() * 101);
+    //   
+    //   if (cell.className === 'cell colored') {
+    //     lightness = findCurrentLightness(cell);
+    //     //lightness = lowerLightness(lightness);
+    //   }
+    //   
+    //   cell.style.backgroundColor = `hsl(${hue}, ${saturation}%, ${lightness}%)`;
+    //   cell.classList.add('colored');
+    // }));
   } else if (color === 'black') {
-    cells.forEach( cell => cell.addEventListener('mouseenter', (e) => {
-      cell.style.backgroundColor = 'black';
-      cell.classList.remove('colored');
-    }));
+      cells.forEach( cell => cell.addEventListener('mouseenter', drawBlack));//(e) => {
+  //    cell.style.backgroundColor = 'black';
+  //    cell.classList.remove('colored');
+  //  }));
   }
 }
 /*allowDraw applies event listeners to each cell of the grid that change the
