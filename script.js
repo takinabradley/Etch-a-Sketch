@@ -53,7 +53,7 @@ function getDrawColor() {
     return 'black';
   }
 }
-//chooses color based on if the color button is toggled.
+//chooses draw color based on if the color button is toggled.
 
 
 function rgbToLightness(r, g, b) {
@@ -79,27 +79,24 @@ function rgbToLightness(r, g, b) {
   
   return Math.round(l * 100);
 }
-//a modified RGB to HSL function that only returns Lightness.
+//a modified RGB to HSL function that only returns Lightness as an integer.
 
 
 function getCurrentLightness(e) {
-  currentColor = e.target.style.backgroundColor.replace(/\D/g,' ').trim().replaceAll('  ', ' ').split(' ');
-  //finds backgroundColor, replaces all letters with spaces, then trims spaces before separating the values into an array.
+  currentColor = e.target.style.backgroundColor.split(',');
   
-  currentColor[0] = parseInt(currentColor[0], 10);
+  currentColor[0] = parseInt(currentColor[0].replace(/\D/g,''), 10); //removes extra text before parsing
   currentColor[1] = parseInt(currentColor[1], 10);
   currentColor[2] = parseInt(currentColor[2], 10);
   //converts all strings in array to numbers
   
   return rgbToLightness(currentColor[0], currentColor[1], currentColor[2])
 }
-//Could probably use some optimization.
 
 
 function lowerLightness (lightness) {
   return lightness - 9;
 }
-//lowers a given lightness by 10%
 
 
 function drawRandom (e) {
@@ -172,7 +169,7 @@ function createSketchPad (size) {
   createGrid(size);
   allowDraw(getDrawColor());
 }
-/*creates a grid with with drawing allowed- or a 'SketchPad'*/
+/*SketchPad: a grid with drawing allowed*/
 
 
 createSketchPad(16);
