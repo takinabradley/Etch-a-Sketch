@@ -10,7 +10,7 @@ function createRows(size) {
 
 function createCells(size) {
   for (i = 0; i < size; i++) {
-    let rows = document.querySelectorAll('#grid > div');
+    let rows = document.querySelectorAll('.row');
   
     let cell = document.createElement('div');
     cell.classList.add('cell');
@@ -32,8 +32,8 @@ function clearGrid() {
 //clears any previous grid contents.
 
 
-function findGridSize () {
-  return document.querySelectorAll('#grid > div').length;
+function getGridSize () {
+  return document.querySelectorAll('.row').length;
 }
 //counts the rows in the #grid container and returns the grid size.
 
@@ -61,12 +61,12 @@ function getColor() {
 //applies random color if .color toggle is true
 
 
-function findCurrentLightness(e) {
+function getCurrentLightness(e) {
   console.log(e.target.style.backgroundColor);
   return 10;
   /*A mock value to keep the program running, you can visually see the cells get darker on a second pass*/
 }
-// finds the current lightness of a cell
+// gets the current lightness of a cell
 
 
 function lowerLightness (lightness) {
@@ -82,7 +82,7 @@ function drawRandom (e) {
   let lightness = Math.floor(Math.random() * 101);
   
   if (e.target.className === 'cell colored') {
-    lightness = findCurrentLightness(e);
+    lightness = getCurrentLightness(e);
     //lightness = lowerLightness(lightness);
   }
   
@@ -99,6 +99,7 @@ function drawBlack (e) {
 
 function allowDraw (color) {
   cells = document.querySelectorAll('.cell');
+  
   cells.forEach( cell => {
     cell.removeEventListener('mouseenter', drawRandom);
     cell.removeEventListener('mouseenter', drawBlack);
@@ -111,7 +112,7 @@ function allowDraw (color) {
     //   let lightness = Math.floor(Math.random() * 101);
     //   
     //   if (cell.className === 'cell colored') {
-    //     lightness = findCurrentLightness(cell);
+    //     lightness = getCurrentLightness(cell);
     //     //lightness = lowerLightness(lightness);
     //   }
     //   
@@ -129,7 +130,7 @@ function allowDraw (color) {
   background color on mouseenter.
   Needs to be applied to each grid that is created.*/
 //Bug: when a sketchpad is created, and it's original color is black,
-//the color toggle works, but findCurrentLightness is never called. This is fixed
+//the color toggle works, but getCurrentLightness is never called. This is fixed
 //by turning on colors by pressing the color button, clicking wipe (or creating 
 //a new sketchpad), which initializes the sketchpad with allowColor('random').
 //Breaks again when color is switched back to black.
@@ -140,7 +141,7 @@ function allowDraw (color) {
 
 
 function wipeSketchPad() {
-  size = findGridSize();
+  size = getGridSize();
   createSketchPad(size);
 }
 //replaces a current sketchpad with a new sketchpad of the same size
