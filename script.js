@@ -74,6 +74,7 @@ function lowerLightness (lightness) {
 }
 //lowers a given lightness by 10%
 
+
 // function drawRandom (e) {
 //   //e.target.removeEventListener('mouseenter', drawBlack);
 //   let hue = Math.floor(Math.random() * 361);
@@ -89,6 +90,7 @@ function lowerLightness (lightness) {
 //   e.target.style.backgroundColor = 'black';
 //   e.target.classList.remove('colored');
 // }
+
 
 function allowDraw (color) {
   cells = document.querySelectorAll('#grid > div > div');
