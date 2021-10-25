@@ -5,7 +5,6 @@ function createRows(size) {
     grid.appendChild(row);
   }
 }
-//creates 'size' amount of rows and appends them to #grid.
 
 
 function createCells(size) {
@@ -23,25 +22,21 @@ function createCells(size) {
       the actual dom creation of cells to a separate function.*/
   }
 }
-//creates 'size' amount of cells and appends them to existing rows in #grid
+//appends cells to existing rows.
 
 
 function clearGrid() {
-  document.querySelector('#grid').innerHTML = '';
+  grid.innerHTML = '';
 }
-//clears any previous grid contents.
 
 
 function getGridSize () {
   return document.querySelectorAll('.row').length;
 }
-//counts the rows in the #grid container and returns the grid size.
 
 
 function createGrid (size) {
-  
   if (size < 1 || size > 100 || size === null) return;
-  
   grid = document.querySelector('#grid');
 
   clearGrid();
@@ -51,93 +46,99 @@ function createGrid (size) {
 //creates a 'size'x'size' grid.
 
 
-function getColor() {
-  if (document.querySelector('.color').getAttribute('class') === 'color true') {
+function getDrawColor() {
+  if (document.querySelector('.color').classList.contains('true')) {//getAttribute('class') === 'color true') {
     return 'random';
   } else {
     return 'black';
   }
 }
-//applies random color if .color toggle is true
+//chooses color based on if the color button is toggled.
+
+
+function rgbToLightness(r, g, b) {
+  r /= 255, g /= 255, b /= 255;
+
+  var max = Math.max(r, g, b), min = Math.min(r, g, b);
+  var h, s, l = (max + min) / 2;
+
+  if (max == min) {
+    h = s = 0; // achromatic
+  } else {
+    var d = max - min;
+    s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+
+    switch (max) {
+      case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+      case g: h = (b - r) / d + 2; break;
+      case b: h = (r - g) / d + 4; break;
+    }
+
+    h /= 6;
+  }
+  
+  return Math.round(l * 100);
+}
 
 
 function getCurrentLightness(e) {
-  console.log(e.target.style.backgroundColor);
-  return 10;
-  /*A mock value to keep the program running, you can visually see the cells get darker on a second pass*/
+  currentColor = e.target.style.backgroundColor.replace(/\D/g,' ').trim().replaceAll('  ', ' ').split(' ');
+  //finds backgroundColor, replaces all letters with spaces, then trims spaces before separating the values into an array.
+  
+  currentColor[0] = parseInt(currentColor[0], 10);
+  currentColor[1] = parseInt(currentColor[1], 10);
+  currentColor[2] = parseInt(currentColor[2], 10);
+  //converts all strings in array to numbers
+  
+  return rgbToLightness(currentColor[0], currentColor[1], currentColor[2])
 }
-// gets the current lightness of a cell
+//gets the current lightness of a cell. Could probably use some optimization.
 
 
 function lowerLightness (lightness) {
-  
+  return lightness - 9;
 }
 //lowers a given lightness by 10%
 
 
 function drawRandom (e) {
-  //e.target.removeEventListener('mouseenter', drawBlack);
-  let hue = Math.floor(Math.random() * 361);
+  let hue = Math.floor(Math.random() * 361); 
   let saturation = Math.floor(Math.random() * 101);
-  let lightness = Math.floor(Math.random() * 101);
+  let lightness = 90;
   
-  if (e.target.className === 'cell colored') {
-    lightness = getCurrentLightness(e);
-    //lightness = lowerLightness(lightness);
+  if (e.target.classList.contains('colored')) {
+    lightness = lowerLightness(getCurrentLightness(e));
   }
+  //lowers lightness if a cell has been previously colored.
   
-  e.target.style.backgroundColor = `hsl(${hue}, ${saturation}%, ${lightness}%)`;
+  e.target.style.backgroundColor = `hsl( ${hue} ${saturation}% ${lightness}% )`;
   e.target.classList.add('colored');
 }
 
+
 function drawBlack (e) {
-  //e.target.removeEventListener('mouseenter', drawRandom);
   e.target.style.backgroundColor = 'black';
   e.target.classList.remove('colored');
 }
 
 
-function allowDraw (color) {
+function allowDraw (drawColor) {
   cells = document.querySelectorAll('.cell');
   
   cells.forEach( cell => {
     cell.removeEventListener('mouseenter', drawRandom);
     cell.removeEventListener('mouseenter', drawBlack);
   });
+  //must remove any event listeners on the cells on each run to avoid buggy behavior.
   
-  if (color === 'random') {
-    cells.forEach( cell => cell.addEventListener('mouseenter', drawRandom));//(e) => {
-    //   let hue = Math.floor(Math.random() * 361);
-    //   let saturation = Math.floor(Math.random() * 101);
-    //   let lightness = Math.floor(Math.random() * 101);
-    //   
-    //   if (cell.className === 'cell colored') {
-    //     lightness = getCurrentLightness(cell);
-    //     //lightness = lowerLightness(lightness);
-    //   }
-    //   
-    //   cell.style.backgroundColor = `hsl(${hue}, ${saturation}%, ${lightness}%)`;
-    //   cell.classList.add('colored');
-    // }));
-  } else if (color === 'black') {
-      cells.forEach( cell => cell.addEventListener('mouseenter', drawBlack));//(e) => {
-  //    cell.style.backgroundColor = 'black';
-  //    cell.classList.remove('colored');
-  //  }));
+  if (drawColor === 'random') {
+    cells.forEach( cell => cell.addEventListener('mouseenter', drawRandom));
+  } else if (drawColor === 'black') {
+    cells.forEach( cell => cell.addEventListener('mouseenter', drawBlack));
   }
 }
-/*allowDraw applies event listeners to each cell of the grid that change the
-  background color on mouseenter.
-  Needs to be applied to each grid that is created.*/
-//Bug: when a sketchpad is created, and it's original color is black,
-//the color toggle works, but getCurrentLightness is never called. This is fixed
-//by turning on colors by pressing the color button, clicking wipe (or creating 
-//a new sketchpad), which initializes the sketchpad with allowColor('random').
-//Breaks again when color is switched back to black.
-//If you toggle color yet again after this, toggleCurrentLightness is retrives
-//the current color in the console, but it's return value has no effect after a 
-// second pass over the cells.
-
+/*applies event listeners to each cell that changes background color on mouseenter.
+  --Needs to be applied to each grid that is created.-- */
 
 
 function wipeSketchPad() {
@@ -159,18 +160,18 @@ function allowButtonInput() {
   colorToggle = document.querySelector('.color');
   colorToggle.addEventListener('click', (e) => {
     colorToggle.classList.toggle('true');
-    allowDraw(getColor());
+    allowDraw(getDrawColor());
   });
 }
-// applies functions to buttons via event listeners.
+/*applies functions to buttons to wipe, create, and change drawing color of the
+sketchpad*/
 
 
 function createSketchPad (size) {
   createGrid(size);
-  allowDraw(getColor());
+  allowDraw(getDrawColor());
 }
-/*creates a grid with with drawing allowed, aka a 'SketchPad'.
-  Uses getColor(); to get the color that should be used.*/
+/*creates a grid with with drawing allowed- or a 'SketchPad'*/
 
 
 createSketchPad(16);
