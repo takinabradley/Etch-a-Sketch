@@ -79,6 +79,7 @@ function rgbToLightness(r, g, b) {
   
   return Math.round(l * 100);
 }
+//a modified RGB to HSL function that only returns Lightness.
 
 
 function getCurrentLightness(e) {
@@ -92,7 +93,7 @@ function getCurrentLightness(e) {
   
   return rgbToLightness(currentColor[0], currentColor[1], currentColor[2])
 }
-//gets the current lightness of a cell. Could probably use some optimization.
+//Could probably use some optimization.
 
 
 function lowerLightness (lightness) {
