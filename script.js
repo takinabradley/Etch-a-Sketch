@@ -1,6 +1,6 @@
 function createRows(size) {
   for (i = 0; i < size; i++) {
-    row = document.createElement('div');
+    const row = document.createElement('div');
     row.classList.add('row');
     grid.appendChild(row);
   }
@@ -9,9 +9,9 @@ function createRows(size) {
 
 function createCells(size) {
   for (i = 0; i < size; i++) {
-    let rows = document.querySelectorAll('.row');
+    const rows = document.querySelectorAll('.row');
   
-    let cell = document.createElement('div');
+    const cell = document.createElement('div');
     cell.classList.add('cell');
   
     rows.forEach ( row => row.appendChild(cell.cloneNode(true)) );
@@ -37,7 +37,7 @@ function getGridSize () {
 
 function createGrid (size) {
   if (size < 1 || size > 100 || size === null) return;
-  grid = document.querySelector('#grid');
+  const grid = document.querySelector('#grid');
 
   clearGrid();
   createRows(size);
@@ -100,8 +100,8 @@ function lowerLightness (lightness) {
 
 
 function drawRandom (e) {
-  let hue = Math.floor(Math.random() * 361); 
-  let saturation = Math.floor(Math.random() * 101);
+  const hue = Math.floor(Math.random() * 361); 
+  const saturation = Math.floor(Math.random() * 101);
   let lightness = 90;
   
   if (e.target.classList.contains('colored')) {
@@ -121,7 +121,7 @@ function drawBlack (e) {
 
 
 function allowDraw (drawColor) {
-  cells = document.querySelectorAll('.cell');
+  const cells = document.querySelectorAll('.cell');
   
   cells.forEach( cell => {
     cell.removeEventListener('mouseenter', drawRandom);
@@ -140,22 +140,22 @@ function allowDraw (drawColor) {
 
 
 function wipeSketchPad() {
-  size = getGridSize();
+  const size = getGridSize();
   createSketchPad(size);
 }
 //replaces a current sketchpad with a new sketchpad of the same size
 
 
 function allowButtonInput() {
-  wipeBtn = document.querySelector('.wipe');
+  const wipeBtn = document.querySelector('.wipe');
   wipeBtn.addEventListener('click', wipeSketchPad);
   
-  newSketchPad = document.querySelector('.new-sketchpad');
+  const newSketchPad = document.querySelector('.new-sketchpad');
   newSketchPad.addEventListener('click', () => {
     createSketchPad(prompt('Pick a size', '1 - 100'));
   });
   
-  colorToggle = document.querySelector('.color');
+  const colorToggle = document.querySelector('.color');
   colorToggle.addEventListener('click', (e) => {
     colorToggle.classList.toggle('true');
     allowDraw(getDrawColor());
