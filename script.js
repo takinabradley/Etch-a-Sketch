@@ -52,11 +52,11 @@ function createGrid (size) {
 
 
 function getColor() {
-    if (document.querySelector('.color').getAttribute('class') === 'color true') {
-      return 'random';
-    } else {
-      return 'black';
-    }
+  if (document.querySelector('.color').getAttribute('class') === 'color true') {
+    return 'random';
+  } else {
+    return 'black';
+  }
 }
 //applies random color if .color toggle is true
 
@@ -74,11 +74,27 @@ function lowerLightness (lightness) {
 }
 //lowers a given lightness by 10%
 
+// function drawRandom (e) {
+//   //e.target.removeEventListener('mouseenter', drawBlack);
+//   let hue = Math.floor(Math.random() * 361);
+//   let saturation = Math.floor(Math.random() * 101);
+//   let lightness = Math.floor(Math.random() * 101);
+//   
+//   e.target.style.backgroundColor = `hsl(${hue}, ${saturation}%, ${lightness}%)`;
+//   e.target.classList.add('colored');
+// }
+// 
+// function drawBlack (e) {
+//   //e.target.removeEventListener('mouseenter', drawRandom);
+//   e.target.style.backgroundColor = 'black';
+//   e.target.classList.remove('colored');
+// }
 
 function allowDraw (color) {
   cells = document.querySelectorAll('#grid > div > div');
-  cells.forEach( cell => cell.addEventListener('mouseenter', (e) => {
-    if (color === 'random') {
+  
+  if (color === 'random') {
+    cells.forEach( cell => cell.addEventListener('mouseenter', (e) => {
       let hue = Math.floor(Math.random() * 361);
       let saturation = Math.floor(Math.random() * 101);
       let lightness = Math.floor(Math.random() * 101);
@@ -90,25 +106,26 @@ function allowDraw (color) {
       
       cell.style.backgroundColor = `hsl(${hue}, ${saturation}%, ${lightness}%)`;
       cell.classList.add('colored');
-    } else if (color === 'black') {
+    }));
+  } else if (color === 'black') {
+    cells.forEach( cell => cell.addEventListener('mouseenter', (e) => {
       cell.style.backgroundColor = 'black';
       cell.classList.remove('colored');
-    }
-  }));
+    }));
+  }
 }
 /*allowDraw applies event listeners to each cell of the grid that change the
   background color on mouseenter.
   Needs to be applied to each grid that is created.*/
 //Bug: when a sketchpad is created, and it's original color is black,
-//the color toggle works, but findCurrentColor is never called. This is fixed
+//the color toggle works, but findCurrentLightness is never called. This is fixed
 //by turning on colors by pressing the color button, clicking wipe (or creating 
 //a new sketchpad), which initializes the sketchpad with allowColor('random').
 //Breaks again when color is switched back to black.
+//If you toggle color yet again after this, toggleCurrentLightness is retrives
+//the current color in the console, but it's return value has no effect after a 
+// second pass over the cells.
 
-//should I move the 'if' statements outside of the event listener function,
-//then add two separate event listeners inside of them for allowDraw('black') and 
-//allowDraw('random')? I suppose doing it that way would allow me to easily 
-//remove one or the other.
 
 
 function wipeSketchPad() {
